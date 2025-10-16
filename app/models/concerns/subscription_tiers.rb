@@ -1,4 +1,4 @@
-module Enterprise::Concerns::SubscriptionTiers
+module SubscriptionTiers
   extend ActiveSupport::Concern
 
   # Unlocking Tech Subscription Tiers

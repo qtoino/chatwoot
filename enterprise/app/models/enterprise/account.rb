@@ -1,4 +1,6 @@
 module Enterprise::Account
+  include Enterprise::Concerns::Account
+
   # TODO: Remove this when we upgrade administrate gem to the latest version
   # this is a temporary method since current administrate doesn't support virtual attributes
   def manually_managed_features; end

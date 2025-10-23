@@ -38,3 +38,5 @@ class VapiAgentPolicy < ApplicationPolicy
     require_subscription_feature_with_ownership('voice_agents')
   end
 end
+
+VapiAgentPolicy.prepend_mod_with('VapiAgentPolicy')

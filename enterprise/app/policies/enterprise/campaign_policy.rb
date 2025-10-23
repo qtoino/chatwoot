@@ -1,5 +1,5 @@
 module Enterprise::CampaignPolicy
-  include Enterprise::Concerns::SubscriptionPolicy
+  include Concerns::SubscriptionPolicy
 
   def index?
     # Require 'campaigns' subscription feature (Premium tier only)

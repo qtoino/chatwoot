@@ -1,5 +1,5 @@
 module Enterprise::VapiAgentPolicy
-  include Enterprise::Concerns::SubscriptionPolicy
+  include Concerns::SubscriptionPolicy
 
   def index?
     return true if @user.is_a?(SuperAdmin)

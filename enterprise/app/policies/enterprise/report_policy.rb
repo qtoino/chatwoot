@@ -1,5 +1,5 @@
 module Enterprise::ReportPolicy
-  include Enterprise::Concerns::SubscriptionPolicy
+  include Concerns::SubscriptionPolicy
 
   def view?
     # Check subscription feature first (Professional tier+)

@@ -1,4 +1,4 @@
-module Enterprise::Concerns::SubscriptionPolicy
+module Concerns::SubscriptionPolicy
   extend ActiveSupport::Concern
 
   # Check if the account has access to a specific subscription feature

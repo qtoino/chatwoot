@@ -1,5 +1,5 @@
 module Enterprise::Api::V1::Accounts::CampaignsController
-  include Enterprise::Concerns::SubscriptionCheck
+  include Concerns::SubscriptionCheck
 
   private
 

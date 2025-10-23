@@ -1,5 +1,5 @@
 class Api::V1::Accounts::VapiAgentsController < Api::V1::Accounts::BaseController
-  include Concerns::SubscriptionCheck
+  include SubscriptionCheck
 
   before_action :check_authorization
   before_action :set_vapi_agent, only: [:show, :update, :destroy]
@@ -216,6 +216,10 @@ class Api::V1::Accounts::VapiAgentsController < Api::V1::Accounts::BaseControlle
       return vapi_data.dig('model', 'messages', 0, 'content')
     end
     vapi_data.dig('model', 'systemPrompt') || vapi_data.dig('model', 'system_prompt')
+  end
+
+  def required_subscription_feature
+    'voice_agents' # Requires Premium tier
   end
 end
 

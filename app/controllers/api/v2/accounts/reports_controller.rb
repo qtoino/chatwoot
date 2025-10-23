@@ -1,4 +1,5 @@
 class Api::V2::Accounts::ReportsController < Api::V1::Accounts::BaseController
+  include SubscriptionCheck
   include Api::V2::Accounts::ReportsHelper
   include Api::V2::Accounts::HeatmapHelper
 
@@ -133,5 +134,9 @@ class Api::V2::Accounts::ReportsController < Api::V1::Accounts::BaseController
 
   def conversation_metrics
     V2::ReportBuilder.new(Current.account, conversation_params).conversation_metrics
+  end
+
+  def required_subscription_feature
+    'reports' # Requires Professional tier
   end
 end

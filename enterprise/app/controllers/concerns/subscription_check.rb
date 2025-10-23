@@ -1,4 +1,4 @@
-module Enterprise::Concerns::SubscriptionCheck
+module Concerns::SubscriptionCheck
   extend ActiveSupport::Concern
 
   included do

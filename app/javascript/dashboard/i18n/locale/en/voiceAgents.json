@@ -3,7 +3,7 @@
     "HEADER": "Voice Agents",
     "LIST": {
       "TITLE": "Voice Agents",
-      "DESCRIPTION": "Manage Vapi.ai voice agents for your inboxes",
+      "DESCRIPTION": "Manage voice agents for your inboxes",
       "EMPTY_STATE": "No voice agents configured",
       "EMPTY_STATE_DESCRIPTION": "Create your first voice agent to start handling incoming calls with AI",
       "SYNC_BUTTON": "Sync from Vapi",

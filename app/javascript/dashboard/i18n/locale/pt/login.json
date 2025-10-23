@@ -1,9 +1,9 @@
 {
   "LOGIN": {
-    "TITLE": "Entrar no Chatwoot",
+    "TITLE": "Entrar no Unlocking Chat",
     "EMAIL": {
       "LABEL": "E-mail",
-      "PLACEHOLDER": "Empresa{'@'}suaempresa.com.br",
+      "PLACEHOLDER": "exemplo{'@'}suaempresa.pt",
       "ERROR": "Por favor, insira um endereço de e-mail válido"
     },
     "PASSWORD": {
@@ -11,30 +11,30 @@
       "PLACEHOLDER": "Palavra-passe"
     },
     "API": {
-      "SUCCESS_MESSAGE": "Login bem-sucedido",
-      "ERROR_MESSAGE": "Não foi possível conectar ao servidor Woot. Por favor, tente novamente.",
+      "SUCCESS_MESSAGE": "Autenticação bem-sucedida",
+      "ERROR_MESSAGE": "Não foi possível ligar ao servidor. Por favor, tente novamente.",
       "UNAUTH": "E-mail ou palavra-passe incorretos. Por favor, tente novamente."
     },
     "OAUTH": {
       "GOOGLE_LOGIN": "Iniciar sessão com o Google",
-      "BUSINESS_ACCOUNTS_ONLY": "Por favor, use o endereço de e-mail da empresa para iniciar sessão",
+      "BUSINESS_ACCOUNTS_ONLY": "Por favor, utilize o endereço de e-mail da empresa para iniciar sessão",
       "NO_ACCOUNT_FOUND": "Não conseguimos encontrar uma conta com o seu endereço de e-mail."
     },
     "FORGOT_PASSWORD": "Esqueceu-se da sua palavra-passe?",
     "CREATE_NEW_ACCOUNT": "Criar nova conta",
     "SUBMIT": "Iniciar sessão",
     "SAML": {
-      "LABEL": "Login via SSO",
-      "TITLE": "Initiate Single Sign-on (SSO)",
-      "SUBTITLE": "Enter your work email to access your organization",
-      "BACK_TO_LOGIN": "Login via Password",
+      "LABEL": "Entrar via SSO",
+      "TITLE": "Iniciar Single Sign-on (SSO)",
+      "SUBTITLE": "Insira o seu e-mail de trabalho para aceder à sua organização",
+      "BACK_TO_LOGIN": "Entrar via palavra-passe",
       "WORK_EMAIL": {
-        "LABEL": "Work Email",
-        "PLACEHOLDER": "Enter your work email"
+        "LABEL": "E-mail de trabalho",
+        "PLACEHOLDER": "Insira o seu e-mail de trabalho"
       },
-      "SUBMIT": "Continue with SSO",
+      "SUBMIT": "Continuar com SSO",
       "API": {
-        "ERROR_MESSAGE": "SSO authentication failed. Please check your credentials and try again."
+        "ERROR_MESSAGE": "Falha na autenticação SSO. Por favor, verifique as suas credenciais e tente novamente."
       }
     }
   }

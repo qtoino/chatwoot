@@ -1,4 +1,6 @@
 class Api::V1::Accounts::CampaignsController < Api::V1::Accounts::BaseController
+  include Concerns::SubscriptionCheck
+
   before_action :campaign, except: [:index, :create]
   before_action :check_authorization
 
@@ -32,3 +34,5 @@ class Api::V1::Accounts::CampaignsController < Api::V1::Accounts::BaseController
                                      :scheduled_at, audience: [:type, :id], trigger_rules: {}, template_params: {})
   end
 end
+
+Api::V1::Accounts::CampaignsController.prepend_mod_with('Api::V1::Accounts::CampaignsController')

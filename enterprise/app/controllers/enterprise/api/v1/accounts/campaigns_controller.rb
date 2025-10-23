@@ -1,6 +1,4 @@
 module Enterprise::Api::V1::Accounts::CampaignsController
-  include Concerns::SubscriptionCheck
-
   private
 
   def required_subscription_feature

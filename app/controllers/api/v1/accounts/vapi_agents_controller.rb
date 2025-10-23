@@ -1,4 +1,6 @@
 class Api::V1::Accounts::VapiAgentsController < Api::V1::Accounts::BaseController
+  include Concerns::SubscriptionCheck
+
   before_action :check_authorization
   before_action :set_vapi_agent, only: [:show, :update, :destroy]
 
@@ -216,3 +218,5 @@ class Api::V1::Accounts::VapiAgentsController < Api::V1::Accounts::BaseControlle
     vapi_data.dig('model', 'systemPrompt') || vapi_data.dig('model', 'system_prompt')
   end
 end
+
+Api::V1::Accounts::VapiAgentsController.prepend_mod_with('Api::V1::Accounts::VapiAgentsController')

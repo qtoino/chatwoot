@@ -430,6 +430,12 @@ Rails.application.routes.draw do
     end
   end
 
+  # Billing webhooks - always available regardless of enterprise mode
+  namespace :enterprise, defaults: { format: 'json' } do
+    post 'webhooks/stripe', to: 'webhooks/stripe#process_payload'
+    post 'webhooks/firecrawl', to: 'webhooks/firecrawl#process_payload'
+  end
+
   if ChatwootApp.enterprise?
     namespace :enterprise, defaults: { format: 'json' } do
       namespace :api do
@@ -444,9 +450,6 @@ Rails.application.routes.draw do
           end
         end
       end
-
-      post 'webhooks/stripe', to: 'webhooks/stripe#process_payload'
-      post 'webhooks/firecrawl', to: 'webhooks/firecrawl#process_payload'
     end
   end
 

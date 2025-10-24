@@ -1,5 +1,7 @@
 <script setup>
-import router from '../../routes/index';
+import { useRouter } from 'vue-router';
+import { computed } from 'vue';
+
 const props = defineProps({
   backUrl: {
     type: [String, Object],
@@ -15,6 +17,8 @@ const props = defineProps({
   },
 });
 
+const router = useRouter();
+
 const goBack = () => {
   if (props.backUrl !== '') {
     router.push(props.backUrl);
@@ -23,7 +27,9 @@ const goBack = () => {
   }
 };
 
-const buttonStyleClass = props.compact ? 'text-sm' : 'text-base';
+const buttonStyleClass = computed(() =>
+  props.compact ? 'text-sm' : 'text-base'
+);
 </script>
 
 <template>

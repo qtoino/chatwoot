@@ -130,7 +130,7 @@ const handleUpgrade = async () => {
 
       <!-- CTA Button -->
       <button
-        class="w-full bg-woot-500 hover:bg-woot-600 text-white font-medium py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        class="w-full bg-n-brand hover:enabled:brightness-110 text-white font-medium py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         :disabled="isUpgrading"
         @click="handleUpgrade"
       >

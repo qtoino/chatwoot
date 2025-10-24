@@ -118,6 +118,7 @@ export const colors = {
       10: 'rgb(var(--slate-10) / <alpha-value>)',
       11: 'rgb(var(--slate-11) / <alpha-value>)',
       12: 'rgb(var(--slate-12) / <alpha-value>)',
+      13: 'rgb(var(--slate-13) / <alpha-value>)',
     },
 
     iris: {

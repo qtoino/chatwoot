@@ -539,9 +539,12 @@ const menuItems = computed(() => {
   >
     <section class="grid gap-2 mt-2 mb-4">
       <div class="flex items-center min-w-0 gap-2 px-2">
-        <div class="grid flex-shrink-0 size-6 place-content-center">
-          <Logo class="size-4" />
-        </div>
+        <RouterLink
+          :to="accountScopedRoute('home')"
+          class="grid flex-shrink-0 size-6 place-content-center cursor-pointer"
+        >
+          <Logo class="size-[19px]" />
+        </RouterLink>
         <div class="flex-shrink-0 w-px h-3 bg-n-strong" />
         <SidebarAccountSwitcher
           class="flex-grow min-w-0 -mx-1"

@@ -179,5 +179,14 @@ export const icons = {
     width: 14,
     height: 14,
   },
+  baileys: {
+    body: `
+    <circle cx="50" cy="50" r="47" fill="none" stroke="currentColor" stroke-width="3"/>
+    <path d="M28 26 L72 16 L42 54 L42 34 Z" fill="currentColor"/>
+    <path d="M72 74 L28 84 L58 46 L58 66 Z" fill="currentColor"/>
+    `,
+    width: 100,
+    height: 100,
+  },
   /** Ends */
 };

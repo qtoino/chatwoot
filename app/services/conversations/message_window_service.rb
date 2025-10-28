@@ -23,7 +23,7 @@ class Conversations::MessageWindowService
     when 'Channel::Instagram'
       instagram_messaging_window
     when 'Channel::Whatsapp'
-      MESSAGING_WINDOW_24_HOURS
+      whatsapp_messaging_window
     when 'Channel::TwilioSms'
       twilio_messaging_window
     end
@@ -44,6 +44,14 @@ class Conversations::MessageWindowService
   # Check medium of the inbox to determine the messaging window
   def twilio_messaging_window
     @conversation.inbox.channel.medium == 'whatsapp' ? MESSAGING_WINDOW_24_HOURS : nil
+  end
+
+  # Baileys provider doesn't have messaging window restrictions
+  # It simulates a real WhatsApp client, so you can message anytime
+  def whatsapp_messaging_window
+    return nil if @conversation.inbox.channel.provider == 'baileys'
+
+    MESSAGING_WINDOW_24_HOURS
   end
 
   def messenger_messaging_window

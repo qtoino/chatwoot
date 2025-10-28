@@ -14,17 +14,6 @@ const { t } = useI18n();
 const route = useRoute();
 const store = useStore();
 
-// eslint-disable-next-line no-console
-console.log('==================================');
-// eslint-disable-next-line no-console
-console.log(
-  '[BAILEYS DEBUG] FinishSetup.vue loaded - NEW VERSION with debugging'
-);
-// eslint-disable-next-line no-console
-console.log('[BAILEYS DEBUG] Inbox ID from route:', route.params.inbox_id);
-// eslint-disable-next-line no-console
-console.log('==================================');
-
 const qrCodes = reactive({
   whatsapp: '',
   messenger: '',
@@ -147,53 +136,14 @@ async function generateQRCode(platform, identifier) {
 }
 
 async function fetchBaileysConnection() {
-  // eslint-disable-next-line no-console
-  console.log(
-    '[BAILEYS DEBUG] fetchBaileysConnection called, isBaileysProvider:',
-    isBaileysProvider.value
-  );
-
-  if (!isBaileysProvider.value) {
-    // eslint-disable-next-line no-console
-    console.log(
-      '[BAILEYS DEBUG] fetchBaileysConnection - early return, not Baileys provider'
-    );
-    return;
-  }
+  if (!isBaileysProvider.value) return;
 
   try {
-    // eslint-disable-next-line no-console
-    console.log(
-      '[BAILEYS DEBUG] Fetching inbox data for ID:',
-      route.params.inbox_id
-    );
-
     // Refresh inbox data to get latest provider_connection_data
     await store.dispatch('inboxes/get', route.params.inbox_id);
 
-    // eslint-disable-next-line no-console
-    console.log('[BAILEYS DEBUG] Current inbox:', currentInbox.value);
-    // eslint-disable-next-line no-console
-    console.log('[BAILEYS DEBUG] Provider:', currentInbox.value?.provider);
-    // eslint-disable-next-line no-console
-    console.log(
-      '[BAILEYS DEBUG] Provider connection data:',
-      currentInbox.value?.provider_connection_data
-    );
-
     const connectionData = currentInbox.value?.provider_connection_data;
     if (connectionData) {
-      // eslint-disable-next-line no-console
-      console.log(
-        '[BAILEYS DEBUG] Connection status:',
-        connectionData.connection
-      );
-      // eslint-disable-next-line no-console
-      console.log(
-        '[BAILEYS DEBUG] QR code URL length:',
-        connectionData.qr_data_url?.length
-      );
-
       baileysConnectionStatus.value = connectionData.connection || '';
       baileysQRCode.value = connectionData.qr_data_url || '';
 
@@ -202,9 +152,6 @@ async function fetchBaileysConnection() {
         clearInterval(qrPollingInterval.value);
         qrPollingInterval.value = null;
       }
-    } else {
-      // eslint-disable-next-line no-console
-      console.log('[BAILEYS DEBUG] No connection data found');
     }
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -213,63 +160,23 @@ async function fetchBaileysConnection() {
 }
 
 async function startBaileysPolling() {
-  // eslint-disable-next-line no-console
-  console.log(
-    '[BAILEYS DEBUG] startBaileysPolling called, isBaileysProvider:',
-    isBaileysProvider.value
-  );
-
-  if (!isBaileysProvider.value) {
-    // eslint-disable-next-line no-console
-    console.log(
-      '[BAILEYS DEBUG] startBaileysPolling - early return, not Baileys provider'
-    );
-    return;
-  }
+  if (!isBaileysProvider.value) return;
 
   // Prevent starting multiple polling intervals
-  if (qrPollingInterval.value) {
-    // eslint-disable-next-line no-console
-    console.log(
-      '[BAILEYS DEBUG] startBaileysPolling - already polling, skipping'
-    );
-    return;
-  }
+  if (qrPollingInterval.value) return;
 
   // Initial fetch
-  // eslint-disable-next-line no-console
-  console.log(
-    '[BAILEYS DEBUG] startBaileysPolling - calling initial fetchBaileysConnection'
-  );
   await fetchBaileysConnection();
 
   // Poll every 3 seconds for QR code updates
-  // eslint-disable-next-line no-console
-  console.log(
-    '[BAILEYS DEBUG] startBaileysPolling - setting up 3-second polling interval'
-  );
   qrPollingInterval.value = setInterval(fetchBaileysConnection, 3000);
 }
 
 async function generateQRCodes() {
-  // eslint-disable-next-line no-console
-  console.log(
-    '[BAILEYS DEBUG] generateQRCodes called, has currentInbox:',
-    !!currentInbox.value,
-    'isBaileys:',
-    isBaileysProvider.value
-  );
-
-  if (!currentInbox.value) {
-    // eslint-disable-next-line no-console
-    console.log('[BAILEYS DEBUG] generateQRCodes - early return, no inbox');
-    return;
-  }
+  if (!currentInbox.value) return;
 
   // For Baileys provider, use the QR code from provider_connection_data
   if (isBaileysProvider.value) {
-    // eslint-disable-next-line no-console
-    console.log('[BAILEYS DEBUG] generateQRCodes - starting Baileys polling');
     await startBaileysPolling();
     return;
   }
@@ -296,41 +203,15 @@ async function generateQRCodes() {
   }
 }
 
-// Watch for QR code changes
-watch(baileysQRCode, (newVal, oldVal) => {
-  // eslint-disable-next-line no-console
-  console.log('[BAILEYS DEBUG] baileysQRCode changed:', {
-    hadValue: !!oldVal,
-    hasValue: !!newVal,
-    length: newVal?.length,
-  });
-});
-
-// Watch for connection status changes
-watch(baileysConnectionStatus, (newVal, oldVal) => {
-  // eslint-disable-next-line no-console
-  console.log('[BAILEYS DEBUG] baileysConnectionStatus changed:', {
-    from: oldVal,
-    to: newVal,
-  });
-});
-
 // Watch for currentInbox changes and regenerate QR codes when available
 // Note: NOT immediate to prevent double initialization with onMounted
 watch(currentInbox, newInbox => {
-  // eslint-disable-next-line no-console
-  console.log(
-    '[BAILEYS DEBUG] currentInbox watcher fired, has inbox:',
-    !!newInbox
-  );
   if (newInbox) {
     generateQRCodes();
   }
 });
 
 onMounted(() => {
-  // eslint-disable-next-line no-console
-  console.log('[BAILEYS DEBUG] Component mounted, calling generateQRCodes');
   generateQRCodes();
 });
 

@@ -37,9 +37,9 @@ class Channel::Whatsapp < ApplicationRecord
   has_one :inbox, as: :channel, dependent: :destroy
 
   after_create :sync_templates
-  after_create :setup_baileys_connection, if: -> { provider == 'baileys' }
   before_destroy :teardown_webhooks
   before_destroy :disconnect_channel_provider, if: -> { provider_service.respond_to?(:disconnect_channel_provider) }
+  after_commit :setup_baileys_connection_async, on: :create, if: -> { provider == 'baileys' }
 
   def name
     'Whatsapp'
@@ -145,11 +145,9 @@ class Channel::Whatsapp < ApplicationRecord
 
   private
 
-  def setup_baileys_connection
+  def setup_baileys_connection_async
     # Initialize Baileys connection asynchronously to generate QR code
-    setup_channel_provider
-  rescue StandardError => e
-    Rails.logger.error "[BAILEYS] Connection setup failed: #{e.message}"
+    Channels::Whatsapp::BaileysConnectionCheckJob.perform_later(self)
   end
 
   def ensure_webhook_verify_token

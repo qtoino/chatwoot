@@ -27,17 +27,26 @@ class Whatsapp::Providers::WhatsappBaileysService < Whatsapp::Providers::BaseSer
   end
 
   def setup_channel_provider
+    webhook_url = whatsapp_channel.inbox.callback_webhook_url
+    Rails.logger.info '[BAILEYS] Calling API to setup connection'
+    Rails.logger.info "[BAILEYS] Phone: #{whatsapp_channel.phone_number}"
+    Rails.logger.info "[BAILEYS] Webhook URL: #{webhook_url}"
+    Rails.logger.info "[BAILEYS] Provider URL: #{provider_url}"
+
     response = HTTParty.post(
       "#{provider_url}/connections/#{whatsapp_channel.phone_number}",
       headers: api_headers,
       body: {
         clientName: DEFAULT_CLIENT_NAME,
-        webhookUrl: whatsapp_channel.inbox.callback_webhook_url,
+        webhookUrl: webhook_url,
         webhookVerifyToken: whatsapp_channel.provider_config['webhook_verify_token'],
         # TODO: Remove on Baileys v2, default will be false
         includeMedia: false
       }.compact.to_json
     )
+
+    Rails.logger.info "[BAILEYS] API Response Status: #{response.code}"
+    Rails.logger.info "[BAILEYS] API Response Body: #{response.body}"
 
     raise ProviderUnavailableError unless process_response(response)
 

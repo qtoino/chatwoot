@@ -114,13 +114,12 @@ if resource.api?
   json.additional_attributes resource.channel.try(:additional_attributes)
 end
 
-json.provider resource.channel.try(:provider)
-
 ## Telegram Attributes
 json.bot_name resource.channel.try(:bot_name) if resource.telegram?
 
 ### WhatsApp Channel
 if resource.whatsapp?
+  json.provider resource.channel.try(:provider)
   json.message_templates resource.channel.try(:message_templates)
   json.provider_config resource.channel.try(:provider_config) if Current.account_user&.administrator?
   json.provider_connection_data resource.channel.try(:provider_connection_data)

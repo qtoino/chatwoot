@@ -35,23 +35,12 @@ const baileysQRCode = ref('');
 const baileysConnectionStatus = ref('');
 const qrPollingInterval = ref(null);
 
-const currentInbox = computed(() => {
-  const inbox = store.getters['inboxes/getInbox'](route.params.inbox_id);
-  // eslint-disable-next-line no-console
-  console.log(
-    '[BAILEYS DEBUG] currentInbox computed - provider:',
-    inbox?.provider,
-    'has provider_connection_data:',
-    !!inbox?.provider_connection_data
-  );
-  return inbox;
-});
+const currentInbox = computed(() =>
+  store.getters['inboxes/getInbox'](route.params.inbox_id)
+);
 
 const isBaileysProvider = computed(() => {
-  const isBaileys = currentInbox.value?.provider === 'baileys';
-  // eslint-disable-next-line no-console
-  console.log('[BAILEYS DEBUG] isBaileysProvider computed:', isBaileys);
-  return isBaileys;
+  return currentInbox.value?.provider === 'baileys';
 });
 
 // Use useInbox composable with the inbox ID
@@ -238,6 +227,15 @@ async function startBaileysPolling() {
     return;
   }
 
+  // Prevent starting multiple polling intervals
+  if (qrPollingInterval.value) {
+    // eslint-disable-next-line no-console
+    console.log(
+      '[BAILEYS DEBUG] startBaileysPolling - already polling, skipping'
+    );
+    return;
+  }
+
   // Initial fetch
   // eslint-disable-next-line no-console
   console.log(
@@ -318,20 +316,17 @@ watch(baileysConnectionStatus, (newVal, oldVal) => {
 });
 
 // Watch for currentInbox changes and regenerate QR codes when available
-watch(
-  currentInbox,
-  newInbox => {
-    // eslint-disable-next-line no-console
-    console.log(
-      '[BAILEYS DEBUG] currentInbox watcher fired, has inbox:',
-      !!newInbox
-    );
-    if (newInbox) {
-      generateQRCodes();
-    }
-  },
-  { immediate: true }
-);
+// Note: NOT immediate to prevent double initialization with onMounted
+watch(currentInbox, newInbox => {
+  // eslint-disable-next-line no-console
+  console.log(
+    '[BAILEYS DEBUG] currentInbox watcher fired, has inbox:',
+    !!newInbox
+  );
+  if (newInbox) {
+    generateQRCodes();
+  }
+});
 
 onMounted(() => {
   // eslint-disable-next-line no-console

@@ -530,7 +530,10 @@
       "WEBSITE_SUCCESS": "You have successfully finished creating a website channel. Copy the code shown below and paste it on your website. Next time a customer use the live chat, the conversation will automatically appear on your inbox.",
       "WHATSAPP_QR_INSTRUCTION": "Scan the QR code above to quickly test your WhatsApp inbox",
       "MESSENGER_QR_INSTRUCTION": "Scan the QR code above to quickly test your Facebook Messenger inbox",
-      "TELEGRAM_QR_INSTRUCTION": "Scan the QR code above to quickly test your Telegram inbox"
+      "TELEGRAM_QR_INSTRUCTION": "Scan the QR code above to quickly test your Telegram inbox",
+      "BAILEYS_QR_INSTRUCTION": "Open WhatsApp on your phone → Settings → Linked Devices → Link a Device → Scan the QR code below",
+      "BAILEYS_CONNECTED": "WhatsApp successfully connected!",
+      "BAILEYS_WAITING": "Generating QR code... Please wait."
     },
     "REAUTH": "Reauthorize",
     "VIEW": "View",

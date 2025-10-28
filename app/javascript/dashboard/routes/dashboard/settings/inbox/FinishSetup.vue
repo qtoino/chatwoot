@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, reactive, watch } from 'vue';
+import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
@@ -20,9 +20,17 @@ const qrCodes = reactive({
   telegram: '',
 });
 
+const baileysQRCode = ref('');
+const baileysConnectionStatus = ref('');
+const qrPollingInterval = ref(null);
+
 const currentInbox = computed(() =>
   store.getters['inboxes/getInbox'](route.params.inbox_id)
 );
+
+const isBaileysProvider = computed(() => {
+  return currentInbox.value?.provider === 'baileys';
+});
 
 // Use useInbox composable with the inbox ID
 const {
@@ -127,10 +135,50 @@ async function generateQRCode(platform, identifier) {
   }
 }
 
+async function fetchBaileysConnection() {
+  if (!isBaileysProvider.value) return;
+
+  try {
+    // Refresh inbox data to get latest provider_connection_data
+    await store.dispatch('inboxes/get', route.params.inbox_id);
+
+    const connectionData = currentInbox.value?.provider_connection_data;
+    if (connectionData) {
+      baileysConnectionStatus.value = connectionData.connection || '';
+      baileysQRCode.value = connectionData.qr_data_url || '';
+
+      // Stop polling if connected
+      if (connectionData.connection === 'open' && qrPollingInterval.value) {
+        clearInterval(qrPollingInterval.value);
+        qrPollingInterval.value = null;
+      }
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error fetching Baileys connection:', error);
+  }
+}
+
+async function startBaileysPolling() {
+  if (!isBaileysProvider.value) return;
+
+  // Initial fetch
+  await fetchBaileysConnection();
+
+  // Poll every 3 seconds for QR code updates
+  qrPollingInterval.value = setInterval(fetchBaileysConnection, 3000);
+}
+
 async function generateQRCodes() {
   if (!currentInbox.value) return;
 
-  // WhatsApp (both Cloud and Twilio)
+  // For Baileys provider, use the QR code from provider_connection_data
+  if (isBaileysProvider.value) {
+    await startBaileysPolling();
+    return;
+  }
+
+  // WhatsApp (Cloud and Twilio) - generate wa.me QR code
   if (currentInbox.value.phone_number && isAWhatsAppChannel.value) {
     // For Twilio WhatsApp, phone_number format is "whatsapp:+1234567890"
     // Extract just the phone number part for QR code generation
@@ -165,6 +213,13 @@ watch(
 
 onMounted(() => {
   generateQRCodes();
+});
+
+onUnmounted(() => {
+  if (qrPollingInterval.value) {
+    clearInterval(qrPollingInterval.value);
+    qrPollingInterval.value = null;
+  }
 });
 </script>
 
@@ -233,8 +288,41 @@ onMounted(() => {
         >
           <woot-code lang="html" :script="currentInbox.forward_to_email" />
         </div>
+        <!-- Baileys WhatsApp QR Code (Device Linking) -->
         <div
-          v-if="isAWhatsAppChannel && qrCodes.whatsapp"
+          v-if="isBaileysProvider"
+          class="flex flex-col gap-3 items-center mt-8"
+        >
+          <div v-if="baileysQRCode && baileysConnectionStatus !== 'open'">
+            <p class="mt-2 mb-4 text-sm text-n-slate-9 text-center">
+              {{ $t('INBOX_MGMT.FINISH.BAILEYS_QR_INSTRUCTION') }}
+            </p>
+            <div class="rounded-lg shadow outline-1 outline-n-strong outline">
+              <img
+                :src="baileysQRCode"
+                alt="Baileys WhatsApp QR Code"
+                class="rounded-lg size-48"
+              />
+            </div>
+          </div>
+          <div
+            v-else-if="baileysConnectionStatus === 'open'"
+            class="text-center"
+          >
+            <p class="text-sm text-green-600 font-medium">
+              {{ $t('INBOX_MGMT.FINISH.BAILEYS_CONNECTED') }}
+            </p>
+          </div>
+          <div v-else class="text-center">
+            <p class="text-sm text-n-slate-9">
+              {{ $t('INBOX_MGMT.FINISH.BAILEYS_WAITING') }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Other WhatsApp Providers QR Code (wa.me link) -->
+        <div
+          v-if="isAWhatsAppChannel && !isBaileysProvider && qrCodes.whatsapp"
           class="flex flex-col gap-3 items-center mt-8"
         >
           <p class="mt-2 text-sm text-n-slate-9">

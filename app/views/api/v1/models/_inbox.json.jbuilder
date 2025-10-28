@@ -123,6 +123,7 @@ json.bot_name resource.channel.try(:bot_name) if resource.telegram?
 if resource.whatsapp?
   json.message_templates resource.channel.try(:message_templates)
   json.provider_config resource.channel.try(:provider_config) if Current.account_user&.administrator?
+  json.provider_connection_data resource.channel.try(:provider_connection_data)
   json.reauthorization_required resource.channel.try(:reauthorization_required?)
 end
 

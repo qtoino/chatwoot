@@ -451,3 +451,59 @@
   locked: false
   description: 'Token expiry in days'
 ## ------ End of Customizations for Customers ------ ##
+
+## ------ Account Level Feature Defaults ------ ##
+- name: ACCOUNT_LEVEL_FEATURE_DEFAULTS
+  display_title: 'Account Level Feature Defaults'
+  description: 'Default features enabled for new accounts'
+  locked: false
+  value:
+    - name: inbound_emails
+      enabled: true
+    - name: channel_email
+      enabled: true
+    - name: channel_facebook
+      enabled: true
+    - name: help_center
+      enabled: true
+    - name: agent_bots
+      enabled: true
+    - name: macros
+      enabled: true
+    - name: agent_management
+      enabled: true
+    - name: team_management
+      enabled: true
+    - name: inbox_management
+      enabled: true
+    - name: labels
+      enabled: true
+    - name: custom_attributes
+      enabled: true
+    - name: automations
+      enabled: true
+    - name: canned_responses
+      enabled: true
+    - name: integrations
+      enabled: true
+    - name: voice_recorder
+      enabled: true
+    - name: channel_website
+      enabled: true
+    - name: campaigns
+      enabled: true
+    - name: reports
+      enabled: true
+    - name: crm
+      enabled: true
+    - name: auto_resolve_conversations
+      enabled: true
+    - name: chatwoot_v4
+      enabled: true
+    - name: report_v4
+      enabled: true
+    - name: contact_chatwoot_support_team
+      enabled: true
+    - name: channel_instagram
+      enabled: true
+## ------ End of Account Level Feature Defaults ------ ##

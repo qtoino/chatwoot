@@ -139,11 +139,38 @@ async function fetchBaileysConnection() {
   if (!isBaileysProvider.value) return;
 
   try {
+    // eslint-disable-next-line no-console
+    console.log(
+      '[BAILEYS DEBUG] Fetching inbox data for ID:',
+      route.params.inbox_id
+    );
+
     // Refresh inbox data to get latest provider_connection_data
     await store.dispatch('inboxes/get', route.params.inbox_id);
 
+    // eslint-disable-next-line no-console
+    console.log('[BAILEYS DEBUG] Current inbox:', currentInbox.value);
+    // eslint-disable-next-line no-console
+    console.log('[BAILEYS DEBUG] Provider:', currentInbox.value?.provider);
+    // eslint-disable-next-line no-console
+    console.log(
+      '[BAILEYS DEBUG] Provider connection data:',
+      currentInbox.value?.provider_connection_data
+    );
+
     const connectionData = currentInbox.value?.provider_connection_data;
     if (connectionData) {
+      // eslint-disable-next-line no-console
+      console.log(
+        '[BAILEYS DEBUG] Connection status:',
+        connectionData.connection
+      );
+      // eslint-disable-next-line no-console
+      console.log(
+        '[BAILEYS DEBUG] QR code URL length:',
+        connectionData.qr_data_url?.length
+      );
+
       baileysConnectionStatus.value = connectionData.connection || '';
       baileysQRCode.value = connectionData.qr_data_url || '';
 
@@ -152,6 +179,9 @@ async function fetchBaileysConnection() {
         clearInterval(qrPollingInterval.value);
         qrPollingInterval.value = null;
       }
+    } else {
+      // eslint-disable-next-line no-console
+      console.log('[BAILEYS DEBUG] No connection data found');
     }
   } catch (error) {
     // eslint-disable-next-line no-console

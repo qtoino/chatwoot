@@ -179,15 +179,26 @@ class Inbox < ApplicationRecord
   end
 
   def callback_webhook_url
+    base_url = webhook_base_url
+
     case channel_type
     when 'Channel::TwilioSms'
-      "#{ENV.fetch('FRONTEND_URL', nil)}/twilio/callback"
+      "#{base_url}/twilio/callback"
     when 'Channel::Sms'
-      "#{ENV.fetch('FRONTEND_URL', nil)}/webhooks/sms/#{channel.phone_number.delete_prefix('+')}"
+      "#{base_url}/webhooks/sms/#{channel.phone_number.delete_prefix('+')}"
     when 'Channel::Line'
-      "#{ENV.fetch('FRONTEND_URL', nil)}/webhooks/line/#{channel.line_channel_id}"
+      "#{base_url}/webhooks/line/#{channel.line_channel_id}"
     when 'Channel::Whatsapp'
-      "#{ENV.fetch('FRONTEND_URL', nil)}/webhooks/whatsapp/#{channel.phone_number}"
+      "#{base_url}/webhooks/whatsapp/#{channel.phone_number}"
+    end
+  end
+
+  def webhook_base_url
+    # For Baileys provider, use internal host URL if configured
+    if whatsapp? && channel.use_internal_host?
+      ENV.fetch('BAILEYS_INTERNAL_WEBHOOK_URL', ENV.fetch('FRONTEND_URL', nil))
+    else
+      ENV.fetch('FRONTEND_URL', nil)
     end
   end
 

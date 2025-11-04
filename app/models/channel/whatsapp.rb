@@ -73,11 +73,22 @@ class Channel::Whatsapp < ApplicationRecord
   end
 
   def provider_connection_data
+    Rails.logger.info '[BAILEYS DEBUG] provider_connection_data called'
+    Rails.logger.info "[BAILEYS DEBUG] Current user: #{Current.account_user&.email}"
+    Rails.logger.info "[BAILEYS DEBUG] Is admin: #{Current.account_user&.administrator?}"
+    Rails.logger.info "[BAILEYS DEBUG] provider_connection: #{provider_connection.inspect}"
+    Rails.logger.info "[BAILEYS DEBUG] QR data URL present in DB: #{provider_connection&.dig('qr_data_url').present?}"
+
     data = { connection: provider_connection['connection'] }
     if Current.account_user&.administrator?
       data[:qr_data_url] = provider_connection['qr_data_url']
       data[:error] = provider_connection['error']
+      Rails.logger.info '[BAILEYS DEBUG] Admin check passed, including QR data'
+    else
+      Rails.logger.warn '[BAILEYS DEBUG] Admin check failed, QR data will not be returned'
     end
+
+    Rails.logger.info "[BAILEYS DEBUG] Returning data: #{data.inspect}"
     data
   end
 

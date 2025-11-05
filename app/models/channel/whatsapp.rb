@@ -74,7 +74,7 @@ class Channel::Whatsapp < ApplicationRecord
 
   def provider_connection_data
     Rails.logger.info '[BAILEYS DEBUG] provider_connection_data called'
-    Rails.logger.info "[BAILEYS DEBUG] Current user: #{Current.account_user&.email}"
+    Rails.logger.info "[BAILEYS DEBUG] Current user ID: #{Current.account_user&.id}"
     Rails.logger.info "[BAILEYS DEBUG] Is admin: #{Current.account_user&.administrator?}"
     Rails.logger.info "[BAILEYS DEBUG] provider_connection: #{provider_connection.inspect}"
     Rails.logger.info "[BAILEYS DEBUG] QR data URL present in DB: #{provider_connection&.dig('qr_data_url').present?}"

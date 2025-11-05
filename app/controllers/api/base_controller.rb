@@ -8,13 +8,7 @@ class Api::BaseController < ApplicationController
   private
 
   def authenticate_by_access_token?
-    Rails.logger.info "[API BASE] All headers: #{request.headers.to_h.keys.grep(/api_access_token/i)}"
-    Rails.logger.info "[API BASE] api_access_token header: #{request.headers[:api_access_token].inspect}"
-    Rails.logger.info "[API BASE] HTTP_API_ACCESS_TOKEN header: #{request.headers[:HTTP_API_ACCESS_TOKEN].inspect}"
-    Rails.logger.info "[API BASE] Api-Access-Token header: #{request.headers['Api-Access-Token'].inspect}"
-    result = request.headers[:api_access_token].present? || request.headers[:HTTP_API_ACCESS_TOKEN].present?
-    Rails.logger.info "[API BASE] authenticate_by_access_token? result: #{result}"
-    result
+    request.headers[:api_access_token].present? || request.headers[:HTTP_API_ACCESS_TOKEN].present?
   end
 
   def check_authorization(model = nil)

@@ -10,18 +10,11 @@ module EnsureCurrentAccountHelper
     account = Account.find(params[:account_id])
     render_unauthorized('Account is suspended') and return unless account.active?
 
-    Rails.logger.info "[ENSURE ACCOUNT] current_user present: #{current_user.present?}"
-    Rails.logger.info "[ENSURE ACCOUNT] @resource present: #{@resource.present?}"
-    Rails.logger.info "[ENSURE ACCOUNT] @resource type: #{@resource&.class&.name}"
-
     if current_user
-      Rails.logger.info '[ENSURE ACCOUNT] Using current_user path'
       account_accessible_for_user?(account)
     elsif @resource.is_a?(User)
-      Rails.logger.info '[ENSURE ACCOUNT] Using @resource User path'
       account_accessible_for_user?(account)
     elsif @resource.is_a?(AgentBot)
-      Rails.logger.info '[ENSURE ACCOUNT] Using @resource AgentBot path'
       account_accessible_for_bot?(account)
     end
     account

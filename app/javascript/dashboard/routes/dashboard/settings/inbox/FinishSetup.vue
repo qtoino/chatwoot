@@ -147,8 +147,12 @@ async function fetchBaileysConnection() {
       baileysConnectionStatus.value = connectionData.connection || '';
       baileysQRCode.value = connectionData.qr_data_url || '';
 
-      // Stop polling if connected
-      if (connectionData.connection === 'open' && qrPollingInterval.value) {
+      // Stop polling if connected or closed
+      if (
+        (connectionData.connection === 'open' ||
+          connectionData.connection === 'close') &&
+        qrPollingInterval.value
+      ) {
         clearInterval(qrPollingInterval.value);
         qrPollingInterval.value = null;
       }
@@ -311,6 +315,17 @@ onUnmounted(() => {
           >
             <p class="text-sm text-green-600 font-medium">
               {{ $t('INBOX_MGMT.FINISH.BAILEYS_CONNECTED') }}
+            </p>
+          </div>
+          <div
+            v-else-if="baileysConnectionStatus === 'close'"
+            class="text-center max-w-md"
+          >
+            <p class="text-sm text-red-600 font-medium mb-2">
+              {{ $t('INBOX_MGMT.FINISH.BAILEYS_CONNECTION_CLOSED') }}
+            </p>
+            <p class="text-xs text-n-slate-9">
+              {{ $t('INBOX_MGMT.FINISH.BAILEYS_CONNECTION_CLOSED_HINT') }}
             </p>
           </div>
           <div v-else class="text-center">

@@ -533,7 +533,9 @@
       "TELEGRAM_QR_INSTRUCTION": "Scan the QR code above to quickly test your Telegram inbox",
       "BAILEYS_QR_INSTRUCTION": "Open WhatsApp on your phone → Settings → Linked Devices → Link a Device → Scan the QR code below",
       "BAILEYS_CONNECTED": "WhatsApp successfully connected!",
-      "BAILEYS_WAITING": "Generating QR code... Please wait."
+      "BAILEYS_WAITING": "Generating QR code... Please wait.",
+      "BAILEYS_CONNECTION_CLOSED": "QR Code Expired",
+      "BAILEYS_CONNECTION_CLOSED_HINT": "The QR code has expired after multiple attempts. Please delete this inbox and create a new one to get a fresh QR code."
     },
     "REAUTH": "Reauthorize",
     "VIEW": "View",

@@ -104,8 +104,20 @@ class Api::V1::Accounts::ConversationsController < Api::V1::Accounts::BaseContro
   end
 
   def toggle_typing_status
+    Rails.logger.info '[TYPING STATUS] ===== CONTROLLER START ====='
+    Rails.logger.info "[TYPING STATUS] Conversation ID: #{@conversation.id}"
+    Rails.logger.info "[TYPING STATUS] Inbox ID: #{@conversation.inbox.id}"
+    Rails.logger.info "[TYPING STATUS] Channel Type: #{@conversation.inbox.channel_type}"
+    Rails.logger.info "[TYPING STATUS] Channel ID: #{@conversation.inbox.channel.id}"
+    Rails.logger.info "[TYPING STATUS] Request params: #{params.inspect}"
+    Rails.logger.info "[TYPING STATUS] typing_status param: #{params[:typing_status]}"
+    Rails.logger.info "[TYPING STATUS] current_user: #{current_user.inspect}"
+    Rails.logger.info "[TYPING STATUS] Current.user: #{Current.user.inspect}"
+
     typing_status_manager = ::Conversations::TypingStatusManager.new(@conversation, current_user, params)
     typing_status_manager.toggle_typing_status
+
+    Rails.logger.info '[TYPING STATUS] ===== CONTROLLER END ====='
     head :ok
   end
 

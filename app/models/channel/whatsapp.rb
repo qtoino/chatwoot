@@ -93,10 +93,30 @@ class Channel::Whatsapp < ApplicationRecord
   end
 
   def toggle_typing_status(typing_status, conversation:)
-    return unless provider_service.respond_to?(:toggle_typing_status)
+    Rails.logger.info '[TYPING STATUS] ===== WHATSAPP CHANNEL: toggle_typing_status START ====='
+    Rails.logger.info "[TYPING STATUS] Typing status: #{typing_status}"
+    Rails.logger.info "[TYPING STATUS] Conversation ID: #{conversation.id}"
+    Rails.logger.info "[TYPING STATUS] Contact phone: #{conversation.contact.phone_number}"
+    Rails.logger.info "[TYPING STATUS] Provider: #{provider}"
+    Rails.logger.info "[TYPING STATUS] Provider service responds to toggle_typing_status? #{provider_service.respond_to?(:toggle_typing_status)}"
+
+    unless provider_service.respond_to?(:toggle_typing_status)
+      Rails.logger.warn '[TYPING STATUS] Provider service does not support toggle_typing_status'
+      return
+    end
 
     last_message = conversation.messages.last
+    Rails.logger.info "[TYPING STATUS] Last message ID: #{last_message&.id}"
+    Rails.logger.info '[TYPING STATUS] Calling provider_service.toggle_typing_status'
+
     provider_service.toggle_typing_status(typing_status, last_message: last_message, phone_number: conversation.contact.phone_number)
+
+    Rails.logger.info '[TYPING STATUS] ===== WHATSAPP CHANNEL: toggle_typing_status END ====='
+  rescue StandardError => e
+    Rails.logger.error '[TYPING STATUS] ===== ERROR IN WHATSAPP CHANNEL ====='
+    Rails.logger.error "[TYPING STATUS] Error: #{e.message}"
+    Rails.logger.error "[TYPING STATUS] Backtrace: #{e.backtrace.join("\n")}"
+    raise e
   end
 
   def update_presence(status)

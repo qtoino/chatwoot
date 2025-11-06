@@ -104,24 +104,48 @@ class Whatsapp::Providers::WhatsappBaileysService < Whatsapp::Providers::BaseSer
   end
 
   def toggle_typing_status(typing_status, phone_number:, **)
+    Rails.logger.info '[TYPING STATUS] ===== BAILEYS SERVICE: toggle_typing_status START ====='
     @phone_number = phone_number
+    Rails.logger.info "[TYPING STATUS] Typing status event: #{typing_status}"
+    Rails.logger.info "[TYPING STATUS] Contact phone number: #{phone_number}"
+    Rails.logger.info "[TYPING STATUS] WhatsApp channel phone: #{whatsapp_channel.phone_number}"
+
     status_map = {
       Events::Types::CONVERSATION_TYPING_ON => 'composing',
       Events::Types::CONVERSATION_RECORDING => 'recording',
       Events::Types::CONVERSATION_TYPING_OFF => 'paused'
     }
 
+    mapped_status = status_map[typing_status]
+    Rails.logger.info "[TYPING STATUS] Mapped status: #{mapped_status}"
+    Rails.logger.info "[TYPING STATUS] Remote JID: #{remote_jid}"
+    Rails.logger.info "[TYPING STATUS] Provider URL: #{provider_url}"
+
+    request_url = "#{provider_url}/connections/#{whatsapp_channel.phone_number}/presence"
+    request_body = {
+      toJid: remote_jid,
+      type: mapped_status
+    }
+
+    Rails.logger.info "[TYPING STATUS] Request URL: #{request_url}"
+    Rails.logger.info "[TYPING STATUS] Request body: #{request_body.to_json}"
+
     response = HTTParty.patch(
-      "#{provider_url}/connections/#{whatsapp_channel.phone_number}/presence",
+      request_url,
       headers: api_headers,
-      body: {
-        toJid: remote_jid,
-        type: status_map[typing_status]
-      }.to_json
+      body: request_body.to_json
     )
 
-    raise ProviderUnavailableError unless process_response(response)
+    Rails.logger.info "[TYPING STATUS] Response status: #{response.code}"
+    Rails.logger.info "[TYPING STATUS] Response body: #{response.body}"
+    Rails.logger.info "[TYPING STATUS] Response success? #{response.success?}"
 
+    unless process_response(response)
+      Rails.logger.error '[TYPING STATUS] Baileys API request failed'
+      raise ProviderUnavailableError
+    end
+
+    Rails.logger.info '[TYPING STATUS] ===== BAILEYS SERVICE: toggle_typing_status END ====='
     true
   end
 
